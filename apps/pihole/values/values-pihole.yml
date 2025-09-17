@@ -1,0 +1,9 @@
+replicaCount: 1
+
+serviceWeb:
+  type: NodePort
+  nodePort: 30500
+
+serviceDns:
+  type: NodePort
+  nodePort: 30501
