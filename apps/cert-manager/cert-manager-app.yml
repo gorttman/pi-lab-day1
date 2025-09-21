@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://charts.jetstack.io
     chart: cert-manager
-    targetRevision: v1.16.1   # latest stable at time of writing
+    targetRevision: v1.16.1
     helm:
       releaseName: cert-manager
       valueFiles:
@@ -20,3 +20,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true   #  ensures namespace is auto-created
