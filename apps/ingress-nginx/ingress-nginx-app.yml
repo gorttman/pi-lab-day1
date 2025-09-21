@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://kubernetes.github.io/ingress-nginx
     chart: ingress-nginx
-    targetRevision: 4.11.2   # stable version at time of writing
+    targetRevision: 4.11.2
     helm:
       releaseName: ingress-nginx
       valueFiles:
@@ -20,3 +20,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
