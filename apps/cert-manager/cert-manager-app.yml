@@ -11,7 +11,7 @@ spec:
     targetRevision: v1.16.1
     helm:
       releaseName: cert-manager
-      valueFiles:
+      valueFiles:   
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
@@ -20,5 +20,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true   #  ensures namespace is auto-created
