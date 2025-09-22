@@ -10,7 +10,8 @@ spec:
   source:
     repoURL: https://kubernetes.github.io/ingress-nginx
     chart: ingress-nginx
-    targetRevision: 4.11.2    # adjust version if needed
+    targetRevision: 4.11.2    
+    path: apps/ingress-nginx
     helm:
       valueFiles:
         - values.yml
