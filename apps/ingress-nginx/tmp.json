@@ -1,0 +1,25 @@
+{
+    "apiVersion": "v1",
+    "kind": "Namespace",
+    "metadata": {
+        "annotations": {
+            "argocd.argoproj.io/tracking-id": "ingress-nginx-namespace:/Namespace:ingress-nginx/ingress-nginx",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{\"argocd.argoproj.io/tracking-id\":\"ingress-nginx-namespace:/Namespace:ingress-nginx/ingress-nginx\"},\"name\":\"ingress-nginx\"}}\n"
+        },
+        "creationTimestamp": "2025-09-22T00:35:43Z",
+        "labels": {
+            "kubernetes.io/metadata.name": "ingress-nginx"
+        },
+        "name": "ingress-nginx",
+        "resourceVersion": "58587",
+        "uid": "848c9b0a-c37d-426f-94c9-3208f3c14ec8"
+    },
+    "spec": {
+        "finalizers": [
+            "kubernetes"
+        ]
+    },
+    "status": {
+        "phase": "Active"
+    }
+}
