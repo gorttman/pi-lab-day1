@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/gorttman/day1-foundation.git
     targetRevision: main
-    path: apps/ingress-nginx/helm
+    path: apps/ingress-nginx
     helm:
       valueFiles:
         - values.yaml
