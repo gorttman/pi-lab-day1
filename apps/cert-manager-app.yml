@@ -5,16 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  sources:
-    - repoURL: https://charts.jetstack.io
-      chart: cert-manager
-      targetRevision: v1.16.1
-      helm:
-        valueFiles:
-          - $values/apps/values/cert-manager-values.yml
-    - repoURL: https://github.com/gorttman/day1-foundation.git
-      targetRevision: main
-      ref: values
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: v1.16.1
+    helm:
+      valueFiles:
+        - $values/apps/values/cert-manager-values.yml
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
@@ -22,5 +19,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  syncOptions:
-    - CreateNamespace=true

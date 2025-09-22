@@ -4,7 +4,7 @@ metadata:
   name: cert-manager-crds
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"   # CRDs before the main app
+    argocd.argoproj.io/sync-wave: "0"   # ensure CRDs first
 spec:
   project: default
   source:
@@ -20,5 +20,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  syncOptions:
-    - CreateNamespace=true
