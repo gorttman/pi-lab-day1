@@ -11,4 +11,4 @@ controller:
     enabled: true
 
 defaultBackend:
-  enabled: true
+  enabled: false
