@@ -1,16 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ingress-nginx-namespace
+  name: ingress-nginx
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   source:
     repoURL: https://github.com/gorttman/day1-foundation.git
     targetRevision: main
-    path: apps/ingress-nginx
+    path: apps/ingress-nginx/helm
+    helm:
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -18,8 +21,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ingress-nginx
