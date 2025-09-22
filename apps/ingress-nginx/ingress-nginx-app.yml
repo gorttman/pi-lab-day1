@@ -3,16 +3,18 @@ kind: Application
 metadata:
   name: ingress-nginx
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   source:
     repoURL: https://kubernetes.github.io/ingress-nginx
     chart: ingress-nginx
-    targetRevision: 4.11.2        # stable release
+    targetRevision: 4.11.2
     helm:
       releaseName: ingress-nginx
       valueFiles:
-        - values.yaml             #  external values file
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -21,4 +23,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=tru
+    - CreateNamespace=false

@@ -1,16 +1,6 @@
 controller:
-  replicaCount: 1
   service:
     type: NodePort
     nodePorts:
       http: 30080
       https: 30443
-  metrics:
-    enabled: true
-  resources:
-    requests:
-      cpu: 100m
-      memory: 90Mi
-    limits:
-      cpu: 250m
-      memory: 256Mi
