@@ -3,12 +3,14 @@ kind: Application
 metadata:
   name: cert-manager-crds
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"   # ensures CRDs install first
 spec:
   project: default
   source:
     repoURL: https://github.com/cert-manager/cert-manager/releases/download/v1.16.1
     targetRevision: v1.16.1
-    path: .
+    path: crds
     directory:
       recurse: true
   destination:
@@ -18,3 +20,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+  syncOptions:
+    - CreateNamespace=true
