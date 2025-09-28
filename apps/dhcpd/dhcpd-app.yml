@@ -5,10 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/gorttman/day1-foundation.git
-    targetRevision: main
-    path: apps/dhcpd
+  sources:
+    - repoURL: https://github.com/gorttman/day1-foundation.git
+      targetRevision: main
+      path: apps/dhcpd
+    - repoURL: https://github.com/gorttman/dhcp-config.git
+      targetRevision: main
+      ref: config
   destination:
     server: https://kubernetes.default.svc
     namespace: dhcpd
