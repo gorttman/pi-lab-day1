@@ -19,7 +19,8 @@ spec:
           volumeMounts:
             - name: dhcpd-conf
               mountPath: /etc/dhcp
+              readOnly: true
       volumes:
         - name: dhcpd-conf
           configMap:
-            name: dhcpd-conf
+            name: dhcpd-conf   # comes from dhcp-config repo
