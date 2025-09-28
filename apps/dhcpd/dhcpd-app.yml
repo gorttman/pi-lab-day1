@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: dhcpd
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/gorttman/day1-foundation.git
+    targetRevision: main
+    path: apps/dhcpd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dhcpd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

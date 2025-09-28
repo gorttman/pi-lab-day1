@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: dhcpd
+
+resources:
+  - dhcpd-deploy.yml
+
+# Patch in external dhcp-config repo
+configMapGenerator:
+  - name: dhcpd-conf
+    files:
+      - dhcpd.conf=https://raw.githubusercontent.com/gorttman/dhcp-config/main/dhcpd.conf
+generatorOptions:
+  disableNameSuffixHash: true
