@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dhcpd
+  namespace: dhcpd
 spec:
   replicas: 1
   selector:
@@ -23,4 +24,14 @@ spec:
       volumes:
         - name: dhcpd-conf
           configMap:
-            name: dhcpd-conf   # comes from dhcp-config repo
+            name: dhcpd-conf
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dhcpd-conf
+  namespace: dhcpd
+data:
+  # This pulls from the *second source repo* in dhcpd-app.yml
+  dhcpd.conf: |
+    #@include config/dhcpd.conf

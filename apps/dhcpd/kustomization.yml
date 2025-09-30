@@ -4,4 +4,7 @@ kind: Kustomization
 namespace: dhcpd
 
 resources:
+  - dhcpd-namespace.yml
   - dhcpd-deploy.yml
+  - dhcpd-test.yml
+  - gorttman-git-pat-sealedsecret.yml
