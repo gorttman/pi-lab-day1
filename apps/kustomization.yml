@@ -2,6 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - dhcpd-app.yml
-  - dhcpd-secret-app.yml
-  - dhcpd-conf-app.yml
+  - dhcpd/dhcpd-app.yml
+  - dhcpd/dhcpd-secret-app.yml
+  - dhcpd/dhcpd-conf-app.yml
