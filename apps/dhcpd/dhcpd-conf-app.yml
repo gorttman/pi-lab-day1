@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dhcpd
+  name: dhcpd-conf
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
   source:
-    repoURL: https://github.com/gorttman/day1-foundation.git
+    repoURL: https://github.com/gorttman/dhcpd-conf.git
     targetRevision: main
-    path: apps/dhcpd/deploy
+    path: .
   destination:
     server: https://kubernetes.default.svc
     namespace: dhcpd
