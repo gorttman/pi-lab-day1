@@ -6,6 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/name: nfs-server
     app.kubernetes.io/part-of: day1-foundation
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
 spec:
   replicas: 1
   selector:
