@@ -39,7 +39,7 @@ spec:
 
       containers:
         - name: nfs-server
-          image: image: gists/nfs-server:latest
+          image: gists/nfs-server:latest
           securityContext:
             privileged: true
           env:
