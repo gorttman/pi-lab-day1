@@ -11,9 +11,4 @@ resources:
   - dhcpd-deploy.yml
 
 configurations:
-  - |-
-    nameReference:
-    - kind: ConfigMap
-      fieldSpecs:
-      - kind: Deployment
-        path: spec/template/spec/volumes/configMap/name
+  - kustomize-config.yml
