@@ -13,16 +13,12 @@ spec:
     server: https://kubernetes.default.svc
     namespace: infra
   sources:
-    # 1. infrastructure manifests
     - repoURL: https://github.com/gorttman/day1-foundation.git
       targetRevision: main
       path: apps/dhcpd
-
-    # 2. runtime config (dhcpd.conf → ConfigMap)
     - repoURL: https://github.com/gorttman/dhcpd-config.git
       targetRevision: main
-      path: "."    #  render from repo root (where kustomization.yml lives)
-
+      path: "."
   syncPolicy:
     automated:
       prune: true
