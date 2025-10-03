@@ -58,7 +58,7 @@ spec:
           imagePullPolicy: IfNotPresent
 
           # Bind only to the correct backend NIC
-	  command: ["dhcpd"]
+          command: ["dhcpd"]
           args:
             - "-4"
             - "-f"
