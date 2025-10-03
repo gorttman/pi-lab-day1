@@ -19,9 +19,7 @@ spec:
     spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      serviceAccountName: default
 
-      # pin to master node
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -44,24 +42,22 @@ spec:
           image: itsthenetwork/nfs-server-alpine:latest
           securityContext:
             privileged: true
+          env:
+            - name: SHARED_DIRECTORY
+              value: /exports
           ports:
             - containerPort: 2049
-              name: nfs
               protocol: TCP
             - containerPort: 2049
-              name: nfs-udp
+              protocol: UDP
+            - containerPort: 111
+              protocol: TCP
+            - containerPort: 111
               protocol: UDP
           volumeMounts:
-            - name: nfs-exports
-              mountPath: /etc/exports
-              subPath: exports
-              readOnly: true
             - name: nfs-data
               mountPath: /exports
       volumes:
-        - name: nfs-exports
-          configMap:
-            name: nfs-exports
         - name: nfs-data
           hostPath:
             path: /srv/nfs
