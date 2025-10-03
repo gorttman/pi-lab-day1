@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dhcpd-test
+  namespace: infra
+spec:
+  restartPolicy: Never
+  hostNetwork: true
+  containers:
+  - name: test
+    image: busybox
+    command: ["udhcpc", "-i", "eth1", "-vv"]

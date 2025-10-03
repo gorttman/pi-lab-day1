@@ -3,5 +3,3 @@ kind: Kustomization
 
 resources:
   - dhcpd/dhcpd-app.yml
-  - dhcpd/dhcpd-secret-app.yml
-  - dhcpd/dhcpd-conf-app.yml
