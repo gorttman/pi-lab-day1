@@ -1,6 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+namespace: infra
+
 resources:
   - dhcpd-namespace.yml
   - dhcpd-serviceaccount.yml
@@ -8,9 +10,18 @@ resources:
   - dhcpd-rolebinding.yml
   - dhcpd-deploy.yml
 
-configMapGenerator:
-  - name: dhcpd-config
-    files:
-      - dhcpd.conf=dhcpd-conf/dhcpd.conf
-generatorOptions:
-  disableNameSuffixHash: true
+# Private repo remote base (Argo uses repo Secret to fetch).
+# If your default branch is not 'main', change ref=
+resources:
+  - github.com/gorttman/dhcpd-config?ref=main
+
+# Ensure the hashed ConfigMap name is rewritten into the Deployment volume
+configurations:
+  - |-
+    nameReference:
+    - kind: ConfigMap
+      fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/volumes/configMap/name
+      - kind: Pod
+        path: spec/volumes/configMap/name

@@ -4,40 +4,88 @@ metadata:
   name: dhcpd
   namespace: infra
   labels:
-    app: dhcpd
+    app.kubernetes.io/name: dhcpd
+    app.kubernetes.io/part-of: day1-foundation
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dhcpd
+      app.kubernetes.io/name: dhcpd
   template:
     metadata:
       labels:
-        app: dhcpd
-      annotations:
-        checksum/dhcpd-config: "{{- .ConfigMap.data.dhcpd.conf | sha256sum -}}"
+        app.kubernetes.io/name: dhcpd
+        app.kubernetes.io/part-of: day1-foundation
     spec:
+      serviceAccountName: dhcpd
+
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
-      serviceAccountName: dhcpd
+
       nodeSelector:
-        kubernetes.io/hostname: pi-1   # pin to backend NIC node
+        kubernetes.io/arch: arm64
+        pi-lab.io/lan: backend   # <-- label your target node accordingly
+
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+
       containers:
-      - name: dhcpd
-        image: networkboot/dhcpd:2.4.5-arm64
-        imagePullPolicy: IfNotPresent
-        args: ["-d", "-cf", "/etc/dhcp/dhcpd.conf", "-lf", "/var/lib/dhcp/dhcpd.leases", "eth1"]
-        ports:
-          - containerPort: 67
-            protocol: UDP
-        volumeMounts:
-          - name: dhcpd-config
-            mountPath: /etc/dhcp
-        securityContext:
-          runAsUser: 0
-          capabilities:
-            add: ["NET_ADMIN", "NET_BIND_SERVICE", "NET_RAW"]
+        - name: dhcpd
+          image: networkboot/dhcpd:1.3.0
+          imagePullPolicy: IfNotPresent
+
+          args:
+            - "-4"
+            - "-f"
+            - "-cf"
+            - "/etc/dhcp/dhcpd.conf"
+            - "eth1"    # <-- change if your backend NIC has a different name
+
+          ports:
+            - name: dhcp
+              containerPort: 67
+              protocol: UDP
+
+          volumeMounts:
+            - name: dhcpd-config
+              mountPath: /etc/dhcp
+              readOnly: true
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              add: ["NET_ADMIN", "NET_RAW", "NET_BIND_SERVICE"]
+            runAsNonRoot: false
+            runAsUser: 0
+
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "dhcpd -t -cf /etc/dhcp/dhcpd.conf >/dev/null 2>&1"]
+            initialDelaySeconds: 2
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 2
+
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "pidof dhcpd >/dev/null 2>&1 || exit 1"]
+            initialDelaySeconds: 10
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+
       volumes:
         - name: dhcpd-config
           configMap:
-            name: dhcpd-config
+            name: dhcpd-config   # will be rewritten to hashed name by Kustomize
