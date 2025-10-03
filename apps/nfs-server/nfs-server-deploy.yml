@@ -39,7 +39,7 @@ spec:
 
       containers:
         - name: nfs-server
-          image: itsthenetwork/nfs-server-alpine:latest
+          image: erichough/nfs-server:latest
           securityContext:
             privileged: true
           env:
