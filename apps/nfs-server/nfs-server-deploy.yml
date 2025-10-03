@@ -39,7 +39,7 @@ spec:
 
       containers:
         - name: nfs-server
-          image: ghcr.io/onedr0p/nfs-server-alpine:latest
+          image: image: gists/nfs-server:latest
           securityContext:
             privileged: true
           env:
