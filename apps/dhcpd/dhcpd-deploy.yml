@@ -19,12 +19,14 @@ spec:
     spec:
       serviceAccountName: dhcpd
 
+      # DHCP must listen to broadcasts on the real LAN
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
 
+      # Pin to master/control-plane node only
       nodeSelector:
         kubernetes.io/arch: arm64
-        pi-lab.io/lan: backend   # <-- label your target node accordingly
+        node-role.kubernetes.io/control-plane: ""   # ensures pod runs only on master
 
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
@@ -36,12 +38,13 @@ spec:
           image: networkboot/dhcpd:1.3.0
           imagePullPolicy: IfNotPresent
 
+          # Bind only to backend NIC (adjust "eth1" to your actual interface name, e.g. end0)
           args:
             - "-4"
             - "-f"
             - "-cf"
             - "/etc/dhcp/dhcpd.conf"
-            - "eth1"    # <-- change if your backend NIC has a different name
+            - "eth1"
 
           ports:
             - name: dhcp
@@ -88,4 +91,4 @@ spec:
       volumes:
         - name: dhcpd-config
           configMap:
-            name: dhcpd-config   # will be rewritten to hashed name by Kustomize
+            name: dhcpd-config   # this will be rewritten to hashed name by kustomize
