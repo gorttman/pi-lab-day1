@@ -9,3 +9,11 @@ resources:
   - dhcpd-role.yml
   - dhcpd-rolebinding.yml
   - dhcpd-deploy.yml
+
+configurations:
+  - |-
+    nameReference:
+    - kind: ConfigMap
+      fieldSpecs:
+      - kind: Deployment
+        path: spec/template/spec/volumes/configMap/name
