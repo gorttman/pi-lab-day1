@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - dhcpd/dhcpd-app.yml
   - pxe-http/pxe-http-app.yml
+  - nfs-server/nfs-server-app.yml

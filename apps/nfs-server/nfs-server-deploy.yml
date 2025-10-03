@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-server
+  namespace: infra
+  labels:
+    app.kubernetes.io/name: nfs-server
+    app.kubernetes.io/part-of: day1-foundation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nfs-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nfs-server
+        app.kubernetes.io/part-of: day1-foundation
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      serviceAccountName: default
+
+      # pin to master node
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values: ["arm64"]
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: In
+                    values: ["", "true"]
+
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+
+      containers:
+        - name: nfs-server
+          image: k8s.gcr.io/volume-nfs:0.8
+          securityContext:
+            privileged: true
+          ports:
+            - containerPort: 2049
+              name: nfs
+              protocol: TCP
+            - containerPort: 2049
+              name: nfs-udp
+              protocol: UDP
+          volumeMounts:
+            - name: nfs-exports
+              mountPath: /etc/exports
+              subPath: exports
+              readOnly: true
+            - name: nfs-data
+              mountPath: /exports
+      volumes:
+        - name: nfs-exports
+          configMap:
+            name: nfs-exports
+        - name: nfs-data
+          hostPath:
+            path: /srv/nfs
+            type: DirectoryOrCreate
