@@ -23,13 +23,32 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
 
-      # Pin to master/control-plane node only
-      nodeSelector:
-        kubernetes.io/arch: arm64
-        node-role.kubernetes.io/control-plane: ""   # ensures pod runs only on master
+      # Affinity: must be arm64 arch AND either control-plane OR master role label
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values: ["arm64"]
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: In
+                    values: ["", "true"]
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values: ["arm64"]
+                  - key: node-role.kubernetes.io/master
+                    operator: In
+                    values: ["", "true"]
 
+      # Tolerations so it can run on tainted master/control-plane
       tolerations:
         - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"
           operator: "Exists"
           effect: "NoSchedule"
 
@@ -91,4 +110,4 @@ spec:
       volumes:
         - name: dhcpd-config
           configMap:
-            name: dhcpd-config   # this will be rewritten to hashed name by kustomize
+            name: dhcpd-config   # will be rewritten to hashed name by kustomize
