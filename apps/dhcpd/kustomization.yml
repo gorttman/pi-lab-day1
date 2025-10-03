@@ -10,18 +10,5 @@ resources:
   - dhcpd-rolebinding.yml
   - dhcpd-deploy.yml
 
-# Private repo remote base (Argo uses repo Secret to fetch).
-# If your default branch is not 'main', change ref=
-resources:
-  - github.com/gorttman/dhcpd-config?ref=main
-
-# Ensure the hashed ConfigMap name is rewritten into the Deployment volume
-configurations:
-  - |-
-    nameReference:
-    - kind: ConfigMap
-      fieldSpecs:
-      - kind: Deployment
-        path: spec/template/spec/volumes/configMap/name
-      - kind: Pod
-        path: spec/volumes/configMap/name
+  # This path resolves into the second repo provided via sources[]
+  - ../dhcpd-config

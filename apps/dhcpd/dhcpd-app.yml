@@ -13,12 +13,15 @@ spec:
     server: https://kubernetes.default.svc
     namespace: infra
   sources:
+    # First source: manifests (this repo)
     - repoURL: https://github.com/gorttman/day1-foundation.git
-      targetRevision: HEAD
+      targetRevision: main
       path: apps/dhcpd
+
+    # Second source: runtime config (dhcpd.conf in separate repo)
     - repoURL: https://github.com/gorttman/dhcpd-config.git
-      targetRevision: HEAD
-      ref: dhcpd-conf
+      targetRevision: main
+
   syncPolicy:
     automated:
       prune: true
