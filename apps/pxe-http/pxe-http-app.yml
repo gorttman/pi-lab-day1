@@ -5,6 +5,8 @@ metadata:
   namespace: argocd
   labels:
     app.kubernetes.io/part-of: day1-foundation
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
   source:
@@ -18,4 +20,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-  syncWave: "5"
