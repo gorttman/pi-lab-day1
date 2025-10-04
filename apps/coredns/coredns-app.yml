@@ -13,7 +13,7 @@ spec:
     - repoURL: https://github.com/gorttman/day1-foundation.git
       targetRevision: main
       path: apps/coredns
-    - repoURL: https://github.com/gorttman/dns/coredns.git
+    - repoURL: https://github.com/gorttman/dns-conf.git
       targetRevision: main
       path: .
   destination:
