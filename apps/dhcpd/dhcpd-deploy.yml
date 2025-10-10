@@ -47,7 +47,7 @@ spec:
 
       containers:
         - name: dhcpd
-          image: networkboot/dhcpd:latest
+          image: ghcr.io/everpeace/dhcpd:latest
           imagePullPolicy: IfNotPresent
           args:
             - eth0
