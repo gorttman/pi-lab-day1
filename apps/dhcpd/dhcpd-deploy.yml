@@ -50,12 +50,7 @@ spec:
           image: networkboot/dhcpd:latest
           imagePullPolicy: IfNotPresent
           args:
-            - "-f"
-            - "-cf"
-            - "/etc/dhcp/dhcpd.conf"
-            - "-lf"
-            - "/var/lib/dhcp/dhcpd.leases"
-            - "eth0"
+            - eth0
           ports:
             - containerPort: 67
               protocol: UDP
