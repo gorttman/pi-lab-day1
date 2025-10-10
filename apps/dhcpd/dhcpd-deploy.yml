@@ -17,8 +17,6 @@ spec:
         app.kubernetes.io/name: dhcpd
         app.kubernetes.io/part-of: day1-foundation
     spec:
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       serviceAccountName: dhcpd
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
