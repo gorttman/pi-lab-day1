@@ -4,7 +4,6 @@ kind: Kustomization
 namespace: infra
 
 resources:
-  - dhcpd-namespace.yml
   - dhcpd-serviceaccount.yml
   - dhcpd-role.yml
   - dhcpd-rolebinding.yml
