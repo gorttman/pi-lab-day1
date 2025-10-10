@@ -21,7 +21,7 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       affinity:
-  	nodeAffinity:
+        nodeAffinity:
     	  requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
