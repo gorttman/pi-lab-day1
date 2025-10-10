@@ -22,20 +22,23 @@ spec:
       containers:
         - name: nginx
           image: nginx:1.25-alpine
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http
           volumeMounts:
-            - name: pxe-http-files
-              mountPath: /usr/share/nginx/html
-            - name: boot-images
-              mountPath: /usr/share/nginx/html/images
+            - name: netboot-files
+              mountPath: /usr/share/nginx/html/netboot/rpi5
               readOnly: true
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
       volumes:
-        - name: pxe-http-files
-          configMap:
-            name: pxe-http-files
-        - name: boot-images
+        - name: netboot-files
           hostPath:
-            path: /srv/pxe
+            path: /var/www/html/netboot/rpi5
             type: Directory
