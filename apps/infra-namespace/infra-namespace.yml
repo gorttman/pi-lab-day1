@@ -3,4 +3,7 @@ kind: Namespace
 metadata:
   name: infra
   labels:
+    name: infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
     argocd.argoproj.io/managed-by: argocd
