@@ -38,12 +38,11 @@ spec:
         - name: dhcpd
           image: ghcr.io/gorttman/dhcpd:latest
           imagePullPolicy: IfNotPresent
-          command: ["/usr/sbin/dhcpd"]
+          command: ["/bin/sh"]
           args:
-            - "-f"
-            - "-cf"
-            - "/etc/dhcp/dhcpd.conf"
-            - "eth0"
+            - -c
+            - |
+              mkdir -p /var/lib/dhcp && touch /var/lib/dhcp/dhcpd.leases && exec /usr/sbin/dhcpd -f -cf /etc/dhcp/dhcpd.conf eth0
           securityContext:
             capabilities:
               add:
