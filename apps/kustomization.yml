@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - infra-namespace/infra-namespace-app.yml
+  - infra-namespace/infra-namespace.yml
   - dhcpd/dhcpd-app.yml
   - pxe-http/pxe-http-app.yml
   - nfs-server/nfs-server-app.yml
