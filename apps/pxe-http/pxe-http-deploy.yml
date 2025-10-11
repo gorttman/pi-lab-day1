@@ -1,11 +1,8 @@
-apiVersion: apps/v1
+piVersion: apps/v1
 kind: Deployment
 metadata:
   name: pxe-http
   namespace: infra
-  labels:
-    app.kubernetes.io/name: pxe-http
-    app.kubernetes.io/part-of: day1-foundation
 spec:
   replicas: 1
   selector:
@@ -22,23 +19,20 @@ spec:
       containers:
         - name: nginx
           image: nginx:1.25-alpine
-          imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
               name: http
           volumeMounts:
             - name: netboot-files
               mountPath: /usr/share/nginx/html/netboot/rpi5
               readOnly: true
-          resources:
-            requests:
-              cpu: 5m
-              memory: 32Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+              readOnly: true
       volumes:
         - name: netboot-files
-          hostPath:
-            path: /var/www/html/netboot/rpi5
-            type: Directory
+          configMap:
+            name: pxe-http-config
+        - name: nginx-config
+          configMap:
+            name: pxe-http-nginx-config
