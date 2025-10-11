@@ -4,5 +4,5 @@ kind: Kustomization
 namespace: infra
 resources:
   - pxe-http-configmap.yml
-  - pxe-http-nginx-config.yml
+  - pxe-http-config.yml
   - pxe-http-deploy.yml
