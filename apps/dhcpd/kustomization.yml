@@ -9,5 +9,11 @@ resources:
   - dhcpd-rolebinding.yml
   - dhcpd-deploy.yml
 
-configurations:
-  - kustomize-config.yml
+# --- ConfigMap generation for dhcpd.conf ---
+configMapGenerator:
+  - name: dhcpd-config
+    files:
+      - dhcpd.conf=config/dhcpd.conf
+
+generatorOptions:
+  disableNameSuffixHash: true
