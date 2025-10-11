@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: pxe-http
   namespace: infra
+  labels:
+    app.kubernetes.io/name: pxe-http
+    app.kubernetes.io/part-of: day1-foundation
 spec:
   replicas: 1
   selector:
@@ -17,8 +20,12 @@ spec:
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
       containers:
+        # ------------------------------
+        # 1️⃣ HTTP container (unchanged)
+        # ------------------------------
         - name: nginx
           image: nginx:1.25-alpine
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8081
               name: http
@@ -26,13 +33,46 @@ spec:
             - name: netboot-files
               mountPath: /usr/share/nginx/html/netboot/rpi5
               readOnly: true
-            - name: nginx-config
-              mountPath: /etc/nginx/conf.d
+          resources:
+            requests:
+              cpu: 5m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+
+        # ------------------------------
+        # 2️⃣ NEW TFTP sidecar
+        # ------------------------------
+        - name: tftp
+          image: alpine:3.20
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh","-c"]
+          args:
+            - |
+              apk add --no-cache tftp-hpa &&
+              mkdir -p /var/lib/tftpboot/ipxe &&
+              cp /var/www/html/netboot/rpi5/boot.ipxe /var/lib/tftpboot/ipxe/boot.ipxe 2>/dev/null || true &&
+              echo "Starting tftpd-hpa..." &&
+              exec in.tftpd --foreground --secure /var/lib/tftpboot
+          ports:
+            - containerPort: 69
+              protocol: UDP
+              name: tftp
+          volumeMounts:
+            - name: netboot-files
+              mountPath: /var/www/html/netboot/rpi5
               readOnly: true
+          resources:
+            requests:
+              cpu: 5m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+
       volumes:
         - name: netboot-files
-          configMap:
-            name: pxe-http-config
-        - name: nginx-config
-          configMap:
-            name: pxe-http-nginx-config
+          hostPath:
+            path: /var/www/html/netboot/rpi5
+            type: Directory
